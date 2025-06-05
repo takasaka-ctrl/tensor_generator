@@ -206,14 +206,22 @@ export default function Home() {
         <div className="h-[calc(100vh-64px)] overflow-y-scroll py-4 px-6 pb-[100px]">
           <div className="flex justify-between items-center mb-2">
             <div className="text-lg font-semibold">🪄 Workspace</div>
-            <Link
-              className="flex items-center text-slate-800 hover:text-primary"
-              href="https://github.com/Tensor-Art/tams-gen-qrcode-example"
-              target="_blank"
-            >
-              <Github />
-              <span className="text-sm ml-1">Source Code</span>
-            </Link>
+            <div className="flex gap-2 items-center">
+              <Link
+                className="flex items-center text-slate-800 hover:text-primary"
+                href="/dashboard"
+              >
+                <span className="text-sm">Dashboard</span>
+              </Link>
+              <Link
+                className="flex items-center text-slate-800 hover:text-primary"
+                href="https://github.com/Tensor-Art/tams-gen-qrcode-example"
+                target="_blank"
+              >
+                <Github />
+                <span className="text-sm ml-1">Source Code</span>
+              </Link>
+            </div>
           </div>
           <div className="form-control w-full max-w-xs">
             <label className="label">

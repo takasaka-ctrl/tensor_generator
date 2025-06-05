@@ -6,8 +6,8 @@ import clsx from 'clsx'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'QR Code Generator',
-  description: 'AI Powered QR Code Generator',
+  title: 'AI Image Dashboard',
+  description: 'Manage Tensor.art generations',
 }
 
 export default function RootLayout({
