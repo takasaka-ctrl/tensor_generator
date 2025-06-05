@@ -19,6 +19,7 @@ export default function Home() {
   const [url, setUrl] = useState('')
   const [weight, setWeight] = useState('')
   const [prompt, setPrompt] = useState('')
+  const [modelName, setModelName] = useState('')
   const [selectedModelId, setSelectedModelId] = useState(MODELS[0].id)
   const isInited = useRef(false)
   const [history, setHistory, isHistoryInited] = useLocalStorage<
@@ -57,6 +58,37 @@ export default function Home() {
 
   function handleRemoveHistory() {
     setHistory([])
+  }
+
+  async function handleFetchModelId() {
+    if (!modelName) {
+      return
+    }
+    try {
+      const resp = await fetch(`/api/model/search?name=${encodeURIComponent(modelName)}`)
+      if (!resp.ok) {
+        const json = (await resp.json()) as { message: string }
+        setMessages((messages) => {
+          return produce(messages, (draft) => {
+            draft.unshift({ content: json.message, timestamp: Date.now(), type: 'error' })
+          })
+        })
+        return
+      }
+      const json = (await resp.json()) as { id: string }
+      setSelectedModelId(json.id)
+      setMessages((messages) => {
+        return produce(messages, (draft) => {
+          draft.unshift({ content: 'Model ID fetched', timestamp: Date.now(), type: 'success' })
+        })
+      })
+    } catch (err) {
+      setMessages((messages) => {
+        return produce(messages, (draft) => {
+          draft.unshift({ content: 'Failed to fetch model', timestamp: Date.now(), type: 'error' })
+        })
+      })
+    }
   }
 
   async function handleGenerate() {
@@ -246,6 +278,26 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          </div>
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Model Name</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Enter model name"
+                className="input input-bordered flex-auto"
+                value={modelName}
+                onChange={(e) => setModelName(e.target.value)}
+              />
+              <button className="btn btn-outline" onClick={handleFetchModelId}>
+                Fetch Model ID
+              </button>
+            </div>
+            <label className="label">
+              <span className="label-text-alt">Current ID: {selectedModelId}</span>
+            </label>
           </div>
           <div className="form-control w-full max-w-xs mb-4">
             <label className="label">
